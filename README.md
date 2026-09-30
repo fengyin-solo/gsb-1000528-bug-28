@@ -74,3 +74,30 @@ npm run dev
   `backend/app/routers/<模块>.py`，业务规则在 `backend/app/services/<模块>.py`。
 - 列表接口统一返回 `{ items, total, page, size }`，动作接口统一返回 `{ ok, message }`。
 - 状态流转只允许在 `app/services` 里改，路由层不做业务判断。
+
+## 钻探日志整批导入
+
+入口为「钻探日志」页的「整批导入」页签，后端接口统一挂在 `/api/drilling_import`：
+
+| 接口 | 作用 |
+| --- | --- |
+| `POST /sessions`、`POST /sessions/{id}/rows`、`GET /sessions/{id}` | 断点续传：按行偏移量上传，断线后从服务器确认的 `received` 行继续，重复尾部覆盖、缺口拒绝 |
+| `POST /preview`、`POST /sessions/{id}/preview` | 整批预览：事务内临时落库试算结论/待办后回滚，不写任何业务数据 |
+| `POST /commit`、`POST /sessions/{id}/commit` | 整批提交：解析、校验、落库、结论回写与待办生成同一事务，任意一行不通过返回 422 整批退回 |
+| `GET /batches` | 批次留痕：成功记录与退回记录都在，按文件 SHA-256 指纹幂等 |
+| `GET /quarantine`、`POST /quarantine/{id}/resolve` | 缺钻孔编号的行先隔离，补现场编号后整批迁入台账 |
+| `GET /deviations`、`POST /deviations/{id}/status` | 偏离待办清单（孔深偏离设计、回次深度异常、未登记钻孔、缺孔号待查） |
+
+导入口径：
+
+- **整批事务**：`store.transaction()` 采用快照栈，支持嵌套（预览事务套提交事务），
+  块内异常逐表原地回滚，绝不留下半批日志或半批待办。
+- **指纹幂等**：文件全文 SHA-256 为指纹，重复提交同一文件返回首次结果，不重复落库。
+- **三处同一结论**：库内结论只在 `app/services/drilling_conclusion.py` 计算一次，
+  同批回写到日志台账、钻孔详情、偏离待办；前端三处展示取自该结论。
+- **冲突优先级**：来件与既有日志冲突时以现场终孔记录为准；历史班次按原上报基准
+  保留，导入不改写既有日志行。已确认终孔深度受保护，来件终孔深度与其不一致时
+  整批退回（422），不允许覆盖。
+- **缺孔号隔离**：缺钻孔编号的行进隔离表并生成「缺孔号待查」，其余行按现场编号
+  正常迁移。
+

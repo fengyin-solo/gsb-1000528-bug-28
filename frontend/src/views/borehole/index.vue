@@ -70,7 +70,7 @@ import { request } from '@/api/client'
 type Row = Record<string, string | number | null>
 
 const ENDPOINT = '/api/borehole'
-const columns = ["钻孔编号", "勘探区", "孔口坐标", "设计孔深", "终孔深度", "开孔日期", "终孔日期", "钻孔状态"]
+const columns = ["钻孔编号", "勘探区", "孔口坐标", "设计孔深", "终孔深度", "库内结论深度", "结论来源", "库内偏差", "比对结论", "开孔日期", "终孔日期", "钻孔状态"]
 const actions = ["开始钻进", "登记终孔", "执行封孔"]
 const statuses = ["待施工", "钻进中", "已终孔", "已封孔", "已废弃"]
 const stats = [{"label": "施工中钻孔", "value": 0}, {"label": "已终孔钻孔", "value": 0}, {"label": "已封孔钻孔", "value": 0}]

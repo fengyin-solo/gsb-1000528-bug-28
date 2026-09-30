@@ -28,6 +28,41 @@ class EntryPayload(BaseModel):
     remark: str | None = None
 
 
+class ImportSessionCreate(BaseModel):
+    """创建断点续传上传会话。"""
+
+    file_name: str = Field(..., description="来件原始文件名")
+
+
+class ImportSessionRows(BaseModel):
+    """断点续传：按行偏移量追加一批原始行（第一行为表头）。"""
+
+    offset: int = Field(..., ge=0, description="本批首行在整份文件中的行偏移量")
+    rows: list[str] = Field(default_factory=list, description="本批包含表头在内的原始文本行")
+
+
+class ImportCommitPayload(BaseModel):
+    """整文件一次性预览/提交：前端也可绕过会话直接送全文。"""
+
+    file_name: str
+    content: str
+    fingerprint: str | None = Field(default=None, description="前端预算的 SHA-256，服务端会复核")
+
+
+class QuarantineResolvePayload(BaseModel):
+    """缺孔号隔离行现场补号后迁入台账。"""
+
+    borehole_code: str = Field(..., alias="钻孔编号")
+
+    model_config = {"populate_by_name": True}
+
+
+class TodoStatusPayload(BaseModel):
+    """偏离待办关闭/重开。"""
+
+    status: str = Field(..., description="待处理 / 已处理")
+
+
 
 class BoreholeEntry(BaseModel):
     """钻孔明细结构。"""

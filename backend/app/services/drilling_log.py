@@ -23,7 +23,9 @@ class DrillingLogService:
     ) -> tuple[list[dict[str, Any]], int]:
         rows = store.rows(MODULE)
         if keyword:
-            rows = [row for row in rows if keyword in str(row.get("日志编号", ""))]
+            def hit(row: dict[str, Any]) -> bool:
+                return keyword in str(row.get("日志编号", "")) or keyword in str(row.get("钻孔编号", ""))
+            rows = [row for row in rows if hit(row)]
         if status:
             rows = [row for row in rows if row.get("status") == status]
         total = len(rows)

@@ -19,3 +19,18 @@ export async function fetchJson<T>(path: string): Promise<T> {
   }
   return (await response.json()) as T
 }
+
+/** 计算文件全文 SHA-256 指纹（十六进制），与后端 hashlib.sha256 口径一致，
+ * 用于「按指纹幂等」：同一文件重传后端直接返回首次结果。 */
+export async function sha256Hex(content: string): Promise<string> {
+  const buffer = new TextEncoder().encode(content)
+  const digest = await crypto.subtle.digest('SHA-256', buffer)
+  return Array.from(new Uint8Array(digest))
+    .map((byte) => byte.toString(16).padStart(2, '0'))
+    .join('')
+}
+
+/** 把整份文件按行拆成续传分片（含表头行），offset 为行偏移量。 */
+export function splitIntoLines(content: string): string[] {
+  return content.replace(/^﻿/, '').split(/\r?\n/)
+}

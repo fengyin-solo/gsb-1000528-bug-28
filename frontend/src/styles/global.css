@@ -33,3 +33,22 @@ body { margin: 0; background: #f6f8fb; color: #1f2937; }
 .link { border: none; background: none; color: var(--brand); cursor: pointer; padding: 0; }
 .page-foot { display: flex; justify-content: space-between; margin-top: 8px; font-size: 12px; color: var(--muted); }
 .error-text { color: #b42318; }
+
+/* 钻探日志整批导入 */
+.tab-bar { display: flex; gap: 6px; border-bottom: 1px solid var(--border); margin-bottom: 14px; flex-wrap: wrap; }
+.tab-item { position: relative; border: none; background: none; padding: 8px 14px; cursor: pointer; font-size: 14px; color: var(--muted); border-bottom: 2px solid transparent; }
+.tab-item.active { color: var(--brand); border-bottom-color: var(--brand); font-weight: 600; }
+.tab-badge { display: inline-block; margin-left: 6px; min-width: 18px; padding: 0 6px; border-radius: 9px; background: #fee4e2; color: #b42318; font-size: 11px; line-height: 18px; text-align: center; }
+.import-pane { display: flex; flex-direction: column; gap: 14px; }
+.import-card { background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; }
+.import-card h3 { margin: 0 0 8px; font-size: 15px; }
+.import-card h4 { margin: 12px 0 6px; font-size: 13px; }
+.import-card.ok { border-color: #abefc6; background: #f6fef9; }
+.import-card.reject { border-color: #fda29b; background: #fffbfa; }
+.import-card .hint, .hint { color: var(--muted); font-size: 12px; }
+.file-meta { display: flex; justify-content: space-between; margin-top: 8px; font-size: 12px; }
+.data-table.compact th, .data-table.compact td { padding: 5px 8px; font-size: 12px; }
+.preview-box { margin-top: 10px; }
+.preview-conclusions { margin: 4px 0 0; padding-left: 18px; font-size: 12px; color: #334155; }
+.error-list { margin: 6px 0; padding-left: 18px; color: #b42318; font-size: 13px; }
+.btn:disabled { opacity: 0.55; cursor: not-allowed; }
