@@ -28,6 +28,26 @@ class EntryPayload(BaseModel):
     remark: str | None = None
 
 
+class ImportPayload(BaseModel):
+    """钻探日志整批导入来件：文件全文 + 文件名，断点续传时带上已确认行号。"""
+
+    filename: str
+    content: str
+    resume_from: int = 0
+
+
+class QuarantineReleasePayload(BaseModel):
+    """缺孔号隔离行补录孔号后放行。"""
+
+    hole_no: str
+
+
+class DeviationResolvePayload(BaseModel):
+    """偏离待办现场确认处理。"""
+
+    note: str | None = None
+
+
 
 class BoreholeEntry(BaseModel):
     """钻孔明细结构。"""

@@ -33,3 +33,16 @@ body { margin: 0; background: #f6f8fb; color: #1f2937; }
 .link { border: none; background: none; color: var(--brand); cursor: pointer; padding: 0; }
 .page-foot { display: flex; justify-content: space-between; margin-top: 8px; font-size: 12px; color: var(--muted); }
 .error-text { color: #b42318; }
+.ok-text { color: #067647; }
+.panel { background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; margin-bottom: 12px; }
+.panel-title { font-size: 14px; margin: 0 0 8px; }
+.panel-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 8px; }
+.muted { color: var(--muted); font-size: 12px; }
+.tag { display: inline-block; border-radius: 4px; padding: 1px 8px; font-size: 12px; border: 1px solid var(--border); }
+.tag.insert { color: #067647; border-color: #abefc6; background: #ecfdf3; }
+.tag.override { color: #b54708; border-color: #f9dbaf; background: #fffaeb; }
+.tag.skip { color: var(--muted); border-color: var(--border); background: #f8fafc; }
+.tag.quarantine { color: #b42318; border-color: #fda29b; background: #fef3f2; }
+.tag.error { color: #b42318; border-color: #fda29b; background: #fef3f2; }
+.inline-form { display: inline-flex; gap: 6px; align-items: center; }
+.inline-form input { padding: 3px 6px; border: 1px solid var(--border); border-radius: 4px; }

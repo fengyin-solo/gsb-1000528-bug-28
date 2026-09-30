@@ -31,12 +31,22 @@
       <thead>
         <tr>
           <th v-for="column in columns" :key="column">{{ column }}</th>
+          <th>库内终孔结论（偏离率）</th>
           <th>可执行动作</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="row in rows" :key="String(row.id)">
           <td v-for="column in columns" :key="column">{{ row[column] ?? '—' }}</td>
+          <td>
+            <template v-if="row['终孔深度'] != null">
+              {{ formatDepth(row['终孔深度']) }} / {{ row['结论日志编号'] }}
+              <span :class="Math.abs(Number(row['孔深偏离率'] ?? 0)) > 0.05 ? 'error-text' : 'ok-text'">
+                （{{ formatRate(row['孔深偏离率']) }}）
+              </span>
+            </template>
+            <span v-else class="muted">未终孔</span>
+          </td>
           <td class="row-actions">
             <button
               v-for="action in actions"
@@ -50,7 +60,7 @@
           </td>
         </tr>
         <tr v-if="!rows.length">
-          <td :colspan="columns.length + 1" class="empty-state">暂无钻孔编录数据，可先登记钻孔</td>
+          <td :colspan="columns.length + 2" class="empty-state">暂无钻孔编录数据，可先登记钻孔</td>
         </tr>
       </tbody>
     </table>
@@ -84,6 +94,18 @@ const filterFields = columns.slice(0, 3)
 function resetFilters() {
   filters.value = {}
   void reload()
+}
+
+function formatDepth(value: unknown): string {
+  if (value === null || value === undefined || value === '') return '—'
+  const num = Number(value)
+  return Number.isFinite(num) ? String(num) : String(value)
+}
+
+function formatRate(value: unknown): string {
+  if (value === null || value === undefined || value === '') return '—'
+  const num = Number(value)
+  return Number.isFinite(num) ? `${(num * 100).toFixed(1)}%` : '—'
 }
 
 function exportRows() {
